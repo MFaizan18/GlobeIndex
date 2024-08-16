@@ -65,7 +65,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 ```
-## Define Indices and Their Respective Currencies
+**6.2)** Define Indices and Their Respective Currencies
 The `indices` dictionary defines various global financial indices and their respective trading currencies. This setup allows the program to fetch and process data for these indices accurately. Here is the dictionary:
 ```python
 indices = {
@@ -93,6 +93,35 @@ indices = {
     'S68.SI': 'SGD',   # Singapore Exchange (Singapore Dollar)
 }
 ```
+**6.3)** Define Weights for Each Index
+The `weights` dictionary assigns a specific weight to each index. These weights are used to calculate a weighted global index, ensuring that more significant indices have a proportionally larger impact on the overall index. Here is the dictionary:
+```python
+weights = {
+    '^GSPC': 0.2849341505160153,
+    '^SPX': 0.2849341505160153,
+    '^IXIC': 0.13904406766236627,
+    '^DJI': 0.06733580635221512,
+    'EEM': 0.00013660798561437334,
+    'ACWI': 0.00012873756669008846,
+    'IEF': 5.5655105250300244e-05,
+    'TLT': 7.770477096674917e-05,
+    '^GDAXI': 0.009494473622946843,
+    '^FCHI': 0.0162405469866196,
+    '000001.SS': 0.04434918600192275,
+    '^HSI': 0.016865183409181892,
+    '^AXJO': 0.00974432819197176,
+    '^NSEI': 0.019988365521993356,
+    '^GSPTSE': 0.015615910564057308,
+    '^STOXX50E': 0.029982548282990032,
+    'DBC': 1.4366637718932724e-05,
+    '^FTSE': 0.021862274789680232,
+    '^N225': 0.02685936617017857,
+    '^SSMI': 0.011868092028683554,
+    'S68.SI': 0.00046847731692171925
+}
+```
+These weights are determined based on the relative importance and market capitalization of each index, ensuring a balanced and representative global index.
+
 
 
 
