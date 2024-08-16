@@ -59,6 +59,12 @@ python main.py
 ```
 ## Detailed Code Breakdown
 **5.1)** Let's start by importimg the necessary libraries
+```python
+import yfinance as yf
+import pandas as pd
+import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+```
 
 
 
