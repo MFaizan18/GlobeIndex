@@ -181,11 +181,11 @@ The `interval_mapping` dictionary is a key part of the script that defines how d
 Frequency Code (e.g., '5T', '1D'):
 
 The first element in each tuple is a frequency code that is used for time-based operations within the script.
-The code is designed to be compatible with the pandas library's time-related functions, particularly when generating a range of times using pd.date_range().
+The code is designed to be compatible with the pandas library's time-related functions, particularly when generating a range of times using `pd.date_range()`.
 
 For example:
-'5T' corresponds to a 5-minute frequency.
-'1D' corresponds to a 1-day frequency.
+`5T` corresponds to a 5-minute frequency.
+`1D` corresponds to a 1-day frequency.
 
 This frequency code is used later in the script to create a time range that matches the selected interval, allowing the data to be properly aligned and processed according to the user's selection.
 Smoothing Factor (e.g., 50, 25):
@@ -194,8 +194,8 @@ The second element in each tuple is a smoothing factor, which is used in calcula
 The smoothing factor controls the sensitivity of the EMA to changes in data. A higher value results in more smoothing, meaning that the EMA will react more slowly to recent changes in data, while a lower value makes the EMA more responsive.
 
 In this context:
-For the '5m' interval, the smoothing factor is 50.
-For the '1d' interval, the smoothing factor is 15.
+For the `5m` interval, the smoothing factor is 50.
+For the `1d` interval, the smoothing factor is 15.
 
 This factor is later applied in the script when calculating the EMA to smooth out the data and highlight trends over the selected interval.
 
