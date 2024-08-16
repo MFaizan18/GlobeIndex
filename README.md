@@ -35,6 +35,29 @@ Globe Index includes data from a variety of global indices such as:
 
 **4.5) Commodities:** Invesco DB Commodity Tracking ETF (DBC, USA)
 
+The indices above cover most of the main markets in the world, and we continually add more to the list to ensure comprehensive global coverage.
+
+## 5) How to Run the Project
+Follow these steps to run the project:
+
+**4.1) Clone the Repository**
+Clone the repository to your local machine using the following command:
+```bash
+git clone https://github.com/yourusername/globe-index.git
+```
+**4.2) Navigate to the Project Directory**
+```bash 
+cd globe-index
+```
+**4.3) Install the Required Packages**
+```bash 
+pip install -r requirements.txt
+```
+**4.4) Run the Script**
+```bash
+python main.py
+```
+
 
 
 
