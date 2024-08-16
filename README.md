@@ -65,6 +65,9 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 ```
+## Define Indices and Their Respective Currencies
+The 'indices' dictionary defines various global financial indices and their respective trading currencies. This setup allows the program to fetch and process data for these indices accurately. Here is the dictionary:
+
 
 
 
