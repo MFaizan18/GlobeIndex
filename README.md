@@ -141,7 +141,63 @@ for index, timezone in indices.items():
         continue
     adj_close_data[index] = data['Adj Close']
 ```
-The period and interval for fetching the data are obtained from user input, as shown in the code below.
+The `period` and `interval` for fetching the data are obtained from user input, as shown in the code below.
+
+```python
+allowed_intervals = ['5m', '15m', '30m', '60m', '1d', '5d']
+    interval_mapping = {
+        '5m': ('5T', 50),
+        '15m': ('15T', 25),
+        '30m': ('30T', 25),
+        '60m': ('60T', 20),
+        '1d': ('1D', 15),
+        '5d': ('5D', 10),
+    }
+    
+    while True:
+        interval = input(f"Enter the interval {allowed_intervals}: ")
+        if interval not in allowed_intervals:
+            print("Invalid interval. Please select from the allowed intervals.")
+            continue
+        
+        period = input("Enter the period in days (e.g., '7d', '365d', '40d'): ")
+        if not period.endswith('d') or not period[:-1].isdigit():
+            print("Invalid period format. Please enter the period in days (e.g., '7d').")
+            continue
+        
+        days = int(period.replace('d', ''))
+        if days > 2000:
+            print("The maximum number of days allowed is 2000. Please enter a valid period.")
+            continue
+```
+The script prompts the user to enter a time interval and a period for fetching the data. The allowed intervals are `['5m', '15m', '30m', '60m', '1d', '5d']` representing different time frames (e.g., 5 minutes, 15 minutes, 1 day, etc.)
+
+The user is also asked to input the period, which defines how many days of historical data to retrieve (e.g., '7d' for 7 days). The script checks that the period is in the correct format and doesn't exceed 2000 days.
+
+The script is configured with a maximum period of 2000 days, which is more than 5 years of data. However, it's important to note that for shorter intervals (like minutes), data availability is limited to a much shorter period—in this case, typically up to 60 days. These limitations apply specifically to minute-based intervals. For daily intervals, data can be retrieved for several years without issue. For more detailed information on these limitations, you can refer to the Yahoo Finance page.
+
+The `interval_mapping` dictionary is a key part of the script that defines how different time intervals are handled. Each entry in the dictionary maps a user-selected interval (like '5m' for 5 minutes) to a tuple containing two important elements:
+
+Frequency Code (e.g., '5T', '1D'):
+
+The first element in each tuple is a frequency code that is used for time-based operations within the script.
+The code is designed to be compatible with the pandas library's time-related functions, particularly when generating a range of times using pd.date_range().
+
+For example:
+'5T' corresponds to a 5-minute frequency.
+'1D' corresponds to a 1-day frequency.
+
+This frequency code is used later in the script to create a time range that matches the selected interval, allowing the data to be properly aligned and processed according to the user's selection.
+Smoothing Factor (e.g., 50, 25):
+
+The second element in each tuple is a smoothing factor, which is used in calculations like the Exponential Moving Average (EMA).
+The smoothing factor controls the sensitivity of the EMA to changes in data. A higher value results in more smoothing, meaning that the EMA will react more slowly to recent changes in data, while a lower value makes the EMA more responsive.
+
+In this context:
+For the '5m' interval, the smoothing factor is 50.
+For the '1d' interval, the smoothing factor is 15.
+
+This factor is later applied in the script when calculating the EMA to smooth out the data and highlight trends over the selected interval.
 
 
 
