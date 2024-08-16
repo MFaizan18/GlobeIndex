@@ -40,20 +40,20 @@ The indices above cover most of the main markets in the world, and we continuall
 ## 5) How to Run the Project
 Follow these steps to run the project:
 
-**4.1) Clone the Repository**
+**5.1) Clone the Repository**
 Clone the repository to your local machine using the following command:
 ```bash
 git clone https://github.com/yourusername/globe-index.git
 ```
-**4.2) Navigate to the Project Directory**
+**5.2) Navigate to the Project Directory**
 ```bash 
 cd globe-index
 ```
-**4.3) Install the Required Packages**
+**5.3) Install the Required Packages**
 ```bash 
 pip install -r requirements.txt
 ```
-**4.4) Run the Script**
+**5.4) Run the Script**
 ```bash
 python main.py
 ```
