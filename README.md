@@ -57,8 +57,8 @@ pip install -r requirements.txt
 ```bash
 python main.py
 ```
-## Detailed Code Breakdown
-**5.1)** Let's start by importimg the necessary libraries
+## 6) Detailed Code Breakdown
+**6.1)** Let's start by importimg the necessary libraries
 ```python
 import yfinance as yf
 import pandas as pd
