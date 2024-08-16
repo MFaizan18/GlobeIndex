@@ -65,7 +65,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 ```
-**6.2)** Define Indices and Their Respective Currencies
+**6.2) Define Indices and Their Respective Currencies**
+
 The `indices` dictionary defines various global financial indices and their respective trading currencies. This setup allows the program to fetch and process data for these indices accurately. Here is the dictionary:
 ```python
 indices = {
@@ -93,7 +94,8 @@ indices = {
     'S68.SI': 'SGD',   # Singapore Exchange (Singapore Dollar)
 }
 ```
-**6.3)** Define Weights for Each Index
+**6.3) Define Weights for Each Index**
+
 The `weights` dictionary assigns a specific weight to each index. These weights are used to calculate a weighted global index, ensuring that more significant indices have a proportionally larger impact on the overall index. Here is the dictionary:
 ```python
 weights = {
@@ -121,8 +123,11 @@ weights = {
 }
 ```
 These weights are determined based on the relative importance and market capitalization of each index, ensuring a balanced and representative global index.
+
 ## 7) Data Acquisition
+
 **7.1) Fetch Adjusted Close Data for Indices**
+
 This part of the code uses the yfinance library to fetch historical data for each index defined in the indices dictionary. The data is then stored in the adj_close_data dictionary for further processing.
 ```python
 adj_close_data = {}
