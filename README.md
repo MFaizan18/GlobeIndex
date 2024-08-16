@@ -43,7 +43,7 @@ Follow these steps to run the project:
 **5.1) Clone the Repository**
 Clone the repository to your local machine using the following command:
 ```bash
-git clone https://github.com/yourusername/globe-index.git
+git clone https://github.com/MFaizan18/globe-index.git
 ```
 **5.2) Navigate to the Project Directory**
 ```bash 
@@ -57,6 +57,8 @@ pip install -r requirements.txt
 ```bash
 python main.py
 ```
+## Detailed Code Breakdown
+**5.1)** Let's start by importimg the necessary libraries
 
 
 
