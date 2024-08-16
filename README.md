@@ -19,5 +19,16 @@ Globe Index is a sophisticated market analysis tool that fetches historical data
 
 **2.6) Interactive Visualization:** Visualizes the scaled and smoothed global index with customizable date ranges and intervals, providing an intuitive and interactive experience.
 
-## Why Use Globe Index?
+## 3) Why Use Globe Index?
 Globe Index is designed for anyone who needs a comprehensive view of global financial markets. Whether you're tracking market performance, conducting financial research, or making investment decisions, Globe Index provides the tools and insights you need to stay informed.
+
+## 4) Indices Included
+Globe Index includes data from a variety of global indices such as:
+
+
+
+
+
+
+
+
