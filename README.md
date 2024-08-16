@@ -121,6 +121,7 @@ weights = {
 }
 ```
 These weights are determined based on the relative importance and market capitalization of each index, ensuring a balanced and representative global index.
+## Data Acquisition
 
 
 
