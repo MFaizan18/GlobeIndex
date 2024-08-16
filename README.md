@@ -66,7 +66,34 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 ```
 ## Define Indices and Their Respective Currencies
-The 'indices' dictionary defines various global financial indices and their respective trading currencies. This setup allows the program to fetch and process data for these indices accurately. Here is the dictionary:
+The `indices` dictionary defines various global financial indices and their respective trading currencies. This setup allows the program to fetch and process data for these indices accurately. Here is the dictionary:
+```python
+indices = {
+    '^GSPC': 'USD',   # S&P 500 (USA)
+    '^SPX': 'USD',    # S&P 500 (USA)
+    '^IXIC': 'USD',   # NASDAQ Composite (USA)
+    '^DJI': 'USD',    # Dow Jones Industrial Average (USA)
+    'EEM': 'USD',     # iShares MSCI Emerging Markets ETF (USA)
+    'ACWI': 'USD',    # iShares MSCI ACWI ETF (USA)
+    'IEF': 'USD',     # iShares 7-10 Year Treasury Bond ETF (USA)
+    'TLT': 'USD',     # iShares 20+ Year Treasury Bond ETF (USA)
+    '^GDAXI': 'EUR',  # DAX Performance Index (Germany)
+    '^FCHI': 'EUR',   # CAC 40 Index (France)
+    '000001.SS': 'CNY',  # Shanghai Composite Index (China)
+    '^HSI': 'HKD',    # Hang Seng Index (Hong Kong)
+    '^AXJO': 'AUD',   # S&P/ASX 200 Index (Australia)
+    '^NSEI': 'INR',   # S&P NSE Sensex Index (India)
+    '^GSPTSE': 'CAD',  # S&P/TSX Composite Index (Canada)
+    '^STOXX50E': 'EUR', # EURO STOXX 50 Index (Europe)
+    'DX-Y.NYB': 'USD', # US Dollar Index (USA)
+    'DBC': 'USD',      # Invesco DB Commodity Tracking ETF (USA)
+    '^FTSE': 'GBP',    # FTSE 100 Index (UK)
+    '^N225': 'JPY',    # Nikkei 225 Index (Japan)
+    '^SSMI': 'CHF',    # Swiss Market Index (Switzerland)
+    'S68.SI': 'SGD',   # Singapore Exchange (Singapore Dollar)
+}
+```
+
 
 
 
