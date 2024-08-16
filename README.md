@@ -121,7 +121,25 @@ weights = {
 }
 ```
 These weights are determined based on the relative importance and market capitalization of each index, ensuring a balanced and representative global index.
-## Data Acquisition
+## 7) Data Acquisition
+**7) Fetch Adjusted Close Data for Indices**
+This part of the code uses the yfinance library to fetch historical data for each index defined in the indices dictionary. The data is then stored in the adj_close_data dictionary for further processing.
+```python
+adj_close_data = {}
+
+for index, timezone in indices.items():
+    data = yf.download(index, period=period, interval=interval)
+    data.dropna(how="any", inplace=True)
+    
+    if data.empty:
+        print(f"No data for {index}")
+        continue
+    adj_close_data[index] = data['Adj Close']
+```
+The period and interval for fetching the data are obtained from user input, as shown in the code below.
+
+
+
 
 
 
