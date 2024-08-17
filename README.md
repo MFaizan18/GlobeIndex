@@ -411,6 +411,89 @@ The weighted sum is computed by multiplying each index's adjusted close price by
 
 Finally, the function removes any timestamps where the global index value is NaN, ensuring that the resulting global index series is clean and ready for analysis. This global index, stored in the `global_index variable`, represents the overall performance of the combined indices, weighted according to their significance in the global financial landscape, as determined by their market capitalizations.
 
+## 12)  Adjusting and Smoothing the Global Index
+
+Once the global index is calculated, the script performs additional steps to prepare the data for further analysis or visualization. This involves ensuring that all values in the global index are positive and then applying smoothing to reduce noise and highlight trends.
+
+```python
+# Determine the minimum value in the global index
+min_value = global_index.min()
+
+# Apply a positive offset to ensure all values are positive
+offset = abs(min_value) + 1  # Adding 1 to ensure the smallest value is slightly positive
+adjusted_global_index = global_index + offset
+
+# Apply Exponential Moving Average (EMA) for smoothing
+smoothed_global_index = adjusted_global_index.ewm(span=ema_span, adjust=False).mean()
+
+# Convert smoothed data back to a pandas Series with the same index
+smoothed_global_index = pd.Series(smoothed_global_index, index=adjusted_global_index.index)
+```
+Since we applied robust scaling using the median and interquartile range (IQR), it's expected that the global index might include negative values. To address this, the script adds a positive offset, calculated as the absolute value of the minimum index value plus 1. This ensures that all values in the `adjusted_global_index` are positive without altering their relative dependencies.
+
+Once the offset is applied, the script smooths the global index using an Exponential Moving Average (EMA). This smoothing reduces noise and highlights longer-term trends. Finally, the smoothed data is converted back into a pandas Series with the same index as the adjusted global index, resulting in a `smoothed_global_index` that is ready for further analysis or visualization
+
+## 13) Benchmarking and Rescaling the Global Index
+
+To finalize the global index, the script benchmarks and rescales it to ensure that its values resemble those of a real-world financial index. This is crucial because, after scaling and smoothing, the values of the index might be abstract and not directly comparable to actual market indices.
+
+```python
+# Choose a Benchmark
+benchmark_index = 'ACWI'
+
+# Calculate the Average Value of Your Smoothed Global Index
+reference_period_start = smoothed_global_index.index.min()
+reference_period_end = smoothed_global_index.index.max()
+global_index_avg = smoothed_global_index.loc[reference_period_start:reference_period_end].mean()
+
+# Calculate the Average Value of the Benchmark Index
+benchmark_data = adj_close_data[benchmark_index]
+benchmark_avg = benchmark_data.loc[reference_period_start:reference_period_end].mean()
+
+# Determine the Scaling Factor
+scaling_factor = benchmark_avg / global_index_avg
+
+# Apply the Scaling Factor to Rescale Your Smoothed Global Index
+scaled_smoothed_global_index = smoothed_global_index * scaling_factor
+```
+
+The script starts by selecting a benchmark index, in this case, the ACWI (All Country World Index). The ACWI is an ETF that represents a broad global market exposure, making it an ideal reference for rescaling the global index to resemble a realistic financial index.
+
+The script then calculates the average value of the smoothed global index over its entire period, as well as the average value of the ACWI benchmark index over the same period. By comparing these two averages, the script determines a scaling factor.
+
+This scaling factor is then applied to the smoothed global index to rescale it, ensuring that its values are expressed in points, similar to actual market indices. Without this step, the global index values would not resemble the price levels typically associated with financial indices, making them less intuitive and practical for real-world analysis.
+
+## 14) visualization
+
+```python
+To visualize the final global index, the script plots a graph showing how the index has evolved over time. This # Plotting
+plt.figure(figsize=(14, 8))
+plt.title(f'Global Market Overview ({period}, Interval: {interval}, EMA: {ema_span})', fontsize=16)
+plt.xlabel('Date', fontsize=14)
+plt.ylabel('Global Index Value', fontsize=14)
+
+plt.plot(scaled_smoothed_global_index.index, scaled_smoothed_global_index, label='Global Index', color='blue', linewidth=0.8)
+
+plt.legend(loc='upper left', fontsize=12)
+locator = mdates.AutoDateLocator(minticks=10, maxticks=20)
+formatter = mdates.ConciseDateFormatter(locator)
+plt.gca().xaxis.set_major_locator(locator)
+plt.gca().xaxis.set_major_formatter(formatter)
+plt.xticks(rotation=45)
+plt.grid(True, which='both', linestyle='--', linewidth=0.5)
+plt.tight_layout()
+plt.show()
+plot provides a clear and intuitive view of the global market trends captured by the index.
+
+```
+
+
+
+
+
+
+
+
 
 
 
