@@ -491,9 +491,21 @@ To demonstrate the effectiveness of the global index calculation and visualizati
 
 **14.1) Period = '60d', Interval = '30m':**
 
-This screenshot captures the global index over a short-term period of 60 days with 30-minute intervals, providing a detailed view of intraday market movements.
+This graph captures the global index over a short-term period of 60 days with 30-minute intervals, providing a detailed view of intraday market movements.
 
 ![Intraday global index trends over the past 60 days at 30-minute intervals](GlobeIndex(30m-60d).png)
+
+**14.2) Period = '365d', Interval = '1d':** 
+
+This screenshot presents the global index over a full year with daily intervals, offering insights into the broader market trends on a day-to-day basis.
+
+![Daily global index performance across a full year](GlobeIndex(1d-365d).png)
+
+**14.3) Period = '1000d', Interval = '5d':** 
+
+This screenshot shows the global index over a long-term period of 1000 days with 5-day intervals, highlighting major trends and shifts in the global markets over an extended timeframe.
+
+![Long-term global market trends over 1000 days with 5-day intervals](GlobeIndex(5d-1000d).png)
 
 
 
