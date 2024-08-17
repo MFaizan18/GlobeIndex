@@ -125,6 +125,7 @@ weights = {
 These weights are determined based on the relative importance and market capitalization of each index, ensuring a balanced and representative global index.
 
 ## 7) Data Acquisition
+**7.1) Fetching Adj Close Data**
 
 This part of the code uses the `yfinance` library to fetch historical data for each index defined in the indices dictionary. The data is then stored in the `adj_close_data` dictionary for further processing.
 ```python
