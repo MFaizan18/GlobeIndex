@@ -278,6 +278,146 @@ In this section, the script performs statistical analysis and scaling on the USD
 
 Next, the script applies robust scaling to the data. Robust scaling is particularly useful when dealing with data that contains outliers, as it uses the median and IQR rather than the mean and standard deviation, making it less sensitive to extreme values. For each index, the script subtracts the median from each data point and then divides the result by the IQR. The scaled data is stored in the scaled_data dictionary. This process standardizes the data, ensuring that all indices are on a comparable scale, which is crucial for subsequent analysis and visualization.
 
+## 9) Setting up the Timezone
+
+To ensure consistency across all indices, the script converts the timestamps of the scaled data to a common timezone. Financial data from different markets often comes with timestamps in various local timezones, which can lead to discrepancies when analyzing or comparing the data.
+
+```python
+def convert_timezone(data, to_timezone='America/New_York'):
+    try:
+        data.index = data.index.tz_localize('UTC').tz_convert(to_timezone)
+    except TypeError:
+        data.index = data.index.tz_convert(to_timezone)
+    return data
+
+# Converting to a common timezone 
+for index in scaled_data:
+    scaled_data[index] = convert_timezone(scaled_data[index])
+
+```
+The script defines a function, convert_timezone, which standardizes the timezone of the data to `America/New_York` (Eastern Time). This function first attempts to localize the index to UTC if it is not already timezone-aware, and then converts it to the specified target timezone. If the data is already timezone-aware, the function directly converts it to the desired timezone without re-localizing it. This conversion is applied to all indices in the scaled_data dictionary, ensuring that all data points are aligned to the same timezone. This step is critical for accurate temporal analysis and comparison across different global indices.
+
+## 10) Combined Dataset
+
+In this step, the script combines the scaled and timezone-aligned data from all indices into a single, unified dataset. This combined dataset is crucial for performing further analysis or visualizations on the aggregated data.
+
+```python
+def create_combined_dataset(adj_close_data, interval):
+    # Create a unified time range across all dates
+    all_dates = pd.date_range(
+        start=min(min(data.index.date) for data in adj_close_data.values()),
+        end=max(max(data.index.date) for data in adj_close_data.values()),
+        freq='B'
+    )
+
+    if interval in ['1d', '5d']:
+        # Create a DataFrame for all dates
+        combined_data = pd.DataFrame(index=all_dates)
+
+        # For each index, align and fill the data
+        for idx, data in adj_close_data.items():
+            data = data.reset_index()
+
+            # Handle different cases of index column names
+            date_col = 'Date' if 'Date' in data.columns else data.columns[0]
+            data[date_col] = pd.to_datetime(data[date_col]).dt.date  # Ensure 'Date' is datetime
+            data.set_index(date_col, inplace=True)
+
+            daily_data = data.reindex(combined_data.index, fill_value=float('nan'))
+            combined_data[idx] = daily_data['Adj Close']  # Adding Adjusted Close prices
+
+        combined_data.index = pd.to_datetime(combined_data.index)
+        combined_data.index.name = 'Datetime'
+    else:
+        # Create a MultiIndex DataFrame for all dates and times
+        time_range = pd.date_range(start='00:00', end='23:59', freq=interval).time
+        index = pd.MultiIndex.from_product([all_dates, time_range], names=['Date', 'Time'])
+        combined_data = pd.DataFrame(index=index)
+
+        # For each index, align and fill the data
+        for idx, data in adj_close_data.items():
+            data = data.reset_index()
+
+            # Handle different cases of index column names
+            datetime_col = 'Datetime' if 'Datetime' in data.columns else data.columns[0]
+            data['Date'] = pd.to_datetime(data[datetime_col]).dt.date  # Extract the date
+            data['Time'] = pd.to_datetime(data[datetime_col]).dt.floor(interval).dt.time  # Align to specified intervals
+
+            data.set_index(['Date', 'Time'], inplace=True)
+
+            daily_data = data.reindex(combined_data.index, fill_value=float('nan'))
+            combined_data[idx] = daily_data['Adj Close']  # Adding Adjusted Close prices
+
+        combined_data.index = combined_data.index.to_frame().apply(lambda row: pd.Timestamp.combine(row['Date'], row['Time']), axis=1)
+        combined_data.index = combined_data.index.tz_localize('America/New_York')
+        combined_data.index.name = 'Datetime'
+
+    # Remove rows with all NaN values
+    combined_data.dropna(how='all', inplace=True)
+    
+    return combined_data
+
+# Combine the scaled data into a single dataset
+combined_data = create_combined_dataset(scaled_data, interval_converted)
+```
+The `reate_combined_dataset` function is designed to handle this task by first creating a unified time range that spans the entire period covered by the data. The time range is based on business days ('B' frequency) to align with typical market trading days.
+
+The function then checks the interval to determine how to structure the combined dataset:
+
+**10.1) For Daily or Longer Intervals ('1d', '5d'):**
+
+The function creates a DataFrame indexed by all the business days in the unified time range. For each index, the data is realigned to this common timeline. Missing dates are filled with NaN to ensure that each index aligns correctly with the unified time frame. The adjusted close prices are then added to this combined DataFrame.
+
+**10.2) For Shorter Intervals (e.g., Minute Intervals):**
+
+The function creates a MultiIndex DataFrame that includes both dates and specific times of the day. This setup accommodates more granular data. Each index’s data is then aligned to both the date and time, filling any gaps with NaN values. The combined dataset is then indexed by timestamps localized to the `America/New_York` timezone.
+
+Finally, the function removes any rows that are entirely NaN (indicating no available data for any index at those times), ensuring that the final combined dataset is clean and ready for analysis. This combined dataset, stored in the combined_data variable, is the foundation for all subsequent analysis, providing a comprehensive and consistent view of all the indices over time.
+
+## 11) Calculating the Global Index
+
+After combining and scaling the data, the script proceeds to calculate a global index that represents the aggregated performance of all the indices in the dataset. This global index is a weighted average of the individual indices, where each index's influence is determined by its predefined weight, based on the market capitalization of each index. The dictionary containing these weights, which reflect the relative market cap of each index, has already been explained earlier.
+
+``` python
+def calculate_global_index(combined_data, weights):
+    # Explicitly specify dtype to avoid the warning
+    global_index = pd.Series(index=combined_data.index, dtype='float64')
+    
+    for timestamp in combined_data.index:
+        weighted_sum = 0
+        weight_sum = 0
+        for index, weight in weights.items():
+            if index in combined_data.columns and not pd.isna(combined_data.loc[timestamp, index]):
+                weighted_sum += combined_data.loc[timestamp, index] * weight
+                weight_sum += weight
+        
+        if weight_sum != 0:
+            global_index[timestamp] = weighted_sum / weight_sum
+        else:
+            global_index[timestamp] = None
+    
+    # Drop any rows where the global index is NaN
+    global_index.dropna(inplace=True)
+    
+    return global_index
+
+# Call the function to calculate the global index
+global_index = calculate_global_index(combined_data, weights)
+```
+
+The calculate_global_index function performs this task by first creating an empty global_index series, explicitly set to a `float64` data type to ensure numerical precision. The function then iterates over each timestamp in the combined dataset. For each timestamp, it calculates a weighted sum of the adjusted close prices for all indices that have data available at that specific time.
+
+The weighted sum is computed by multiplying each index's adjusted close price by its corresponding weight, reflecting its market cap significance. The function also tracks the sum of weights to ensure proper averaging. If the sum of weights is non-zero (indicating that valid data was available for at least one index), the global index value for that timestamp is calculated as the weighted average. If no valid data is available for that timestamp, the global index value is set to None.
+
+Finally, the function removes any timestamps where the global index value is NaN, ensuring that the resulting global index series is clean and ready for analysis. This global index, stored in the `global_index variable`, represents the overall performance of the combined indices, weighted according to their significance in the global financial landscape, as determined by their market capitalizations.
+
+
+
+
+
+
+
+
 
 
 
