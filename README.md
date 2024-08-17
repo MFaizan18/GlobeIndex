@@ -493,6 +493,8 @@ To demonstrate the effectiveness of the global index calculation and visualizati
 
 This screenshot captures the global index over a short-term period of 60 days with 30-minute intervals, providing a detailed view of intraday market movements.
 
+![Intraday global index trends over the past 60 days at 30-minute intervals](GlobeIndex(30m-60d).png)
+
 
 
 
