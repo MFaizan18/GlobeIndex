@@ -199,6 +199,24 @@ For the `1d` interval, the smoothing factor is 15.
 
 This factor is later applied in the script when calculating the EMA to smooth out the data and highlight trends over the selected interval.
 
+**7.1) Fetching Exchange Rate Data**
+
+In this section of the code, we handle the currency exchange rates for indices that are traded in currencies other than USD. Since our goal is to create a global index that can be compared on a common basis, it is essential to account for these exchange rates. The exchange rates are stored in the `exchange_rates` dictionary.
+
+```python
+exchange_rates = {}
+
+for index, currency in indices.items():
+    if currency != 'USD':
+        exchange_rate_data = yf.download(f'{currency}=X', period='2200d', interval='1d')
+        
+        if exchange_rate_data.empty:
+            print(f"No data for {index}")
+            continue
+        exchange_rates[currency] = exchange_rate_data['Adj Close']
+```
+
+
 
 
 
