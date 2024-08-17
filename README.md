@@ -486,8 +486,12 @@ plt.grid(True, which='both', linestyle='--', linewidth=0.5)
 plt.tight_layout()
 plt.show()
 plot provides a clear and intuitive view of the global market trends captured by the index.
-
 ```
+To demonstrate the effectiveness of the global index calculation and visualization, I’ve included three screenshots that show the results for different periods and intervals:
+
+**14.1) Period = '60d', Interval = '30m':**
+
+This screenshot captures the global index over a short-term period of 60 days with 30-minute intervals, providing a detailed view of intraday market movements.
 
 
 
