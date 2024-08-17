@@ -465,6 +465,8 @@ This scaling factor is then applied to the smoothed global index to rescale it, 
 
 ## 14) visualization
 
+To visualize the final global index, the script plots a graph showing how the index has evolved over time. This plot provides a clear and intuitive view of the global market trends captured by the index.
+
 ```python
 To visualize the final global index, the script plots a graph showing how the index has evolved over time. This # Plotting
 plt.figure(figsize=(14, 8))
