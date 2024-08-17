@@ -199,7 +199,7 @@ For the `1d` interval, the smoothing factor is 15.
 
 This factor is later applied in the script when calculating the EMA to smooth out the data and highlight trends over the selected interval.
 
-**7.1) Fetching Exchange Rate Data**
+**7.2) Fetching Exchange Rate Data**
 
 In this section of the code, we handle the currency exchange rates for indices that are traded in currencies other than USD. Since our goal is to create a global index that can be compared on a common basis, it is essential to account for these exchange rates. The exchange rates are stored in the `exchange_rates` dictionary.
 
@@ -215,7 +215,68 @@ for index, currency in indices.items():
             continue
         exchange_rates[currency] = exchange_rate_data['Adj Close']
 ```
+The script then moves on to handle currency exchange rates for indices that are not traded in USD, a crucial step for standardizing all data into a common currency (USD). The historical exchange rate data is stored in a dictionary called `exchange_rates`.
 
+To ensure comprehensive coverage, the period for fetching this data is set to 2200 days. Although the script is configured to use a maximum of 2000 days of index data, this extra buffer of 200 days ensures that we have enough exchange rate data, even if some dates are missing or incomplete. In cases where data is missing for certain days, the script later uses a method called ffill (forward fill) to carry forward the most recent available exchange rate, ensuring that there are no gaps in the data. This approach guarantees accurate and consistent conversion of all indices into USD, which is essential for reliable global financial analysis.
+
+**7.3) Converting Non-USD Prices to USD**
+
+```python
+# Convert non-USD prices to USD
+    USD_Convdata = {}
+    for index, currency in indices.items():
+        if currency != 'USD':
+            exchange_rate = exchange_rates[currency]
+            # Ensure the index of exchange_rate is in datetime.date format
+            exchange_rate.index = pd.to_datetime(exchange_rate.index).date
+            # Forward-fill missing exchange rates
+            exchange_rate = exchange_rate.ffill()
+            converted_data = adj_close_data[index].copy()
+            for date in converted_data.index:
+                date_only = date.date()
+                if date_only in exchange_rate.index:
+                    rate = exchange_rate.loc[date_only]
+                    converted_data.loc[date] /= rate
+                else:
+                    print(f"No exchange rate data for {currency} on {date_only}, using the most recent available rate.")
+                    # Use the most recent available rate
+                    rate = exchange_rate.loc[:date_only].iloc[-1]
+                    converted_data.loc[date] /= rate
+            USD_Convdata[index] = converted_data
+        else:
+            USD_Convdata[index] = adj_close_data[index]
+```
+Continuing from the previous explanation, the script next handles the crucial task of converting all non-USD denominated indices into USD. This step ensures that all financial data is standardized, allowing for accurate comparison across global indices.
+
+The script creates a new dictionary, `USD_Convdata`, to store the converted index data. For each index that is not already in USD, the corresponding exchange rate data is retrieved from the exchange_rates dictionary. The script then makes sure the exchange rate dates are correctly formatted and uses forward-filling (`ffill`) to fill in any missing exchange rates, ensuring there are no gaps in the data.
+
+The conversion process involves iterating over each date in the adjusted close prices for the index. For each date, the script checks if there is a corresponding exchange rate available. If the exchange rate is present, the index price is divided by this rate to convert it into USD. If the exchange rate for a particular date is missing, the script uses the most recent available rate, ensuring that the conversion process is robust even in the face of incomplete data.
+
+Finally, the converted data is stored in the USD_Convdata dictionary. For indices already in USD, the data is directly copied over without conversion. This comprehensive conversion process ensures that all index data is consistently expressed in USD, enabling reliable and meaningful global financial analysis.
+
+## Normalization
+
+Next, the script proceeds to normalize the data using robust statistical methods. It calculates the median and interquartile range (IQR) for each index and then applies robust scaling to ensure that the data is standardized, making it less sensitive to outliers
+
+```python
+# Calculate median and IQR for each index
+    medians_iqrs = {}
+    for index, data in USD_Convdata.items():
+        median = data.median()
+        q1 = data.quantile(0.25)
+        q3 = data.quantile(0.75)
+        iqr = q3 - q1
+        medians_iqrs[index] = (median, iqr)
+
+    # Apply robust scaling
+    scaled_data = {}
+    for index, data in USD_Convdata.items():
+        median, iqr = medians_iqrs[index]
+        scaled_data[index] = (data - median) / iqr
+```
+In this section, the script performs statistical analysis and scaling on the USD-converted index data to normalize it and prepare it for further analysis. First, it calculates the median and the Interquartile Range (IQR) for each index. The median represents the central tendency of the data, while the IQR, calculated as the difference between the first quartile (Q1) and the third quartile (Q3), measures the spread of the middle 50% of the data. These values are stored in the `medians_iqrs` dictionary for each index.
+
+Next, the script applies robust scaling to the data. Robust scaling is particularly useful when dealing with data that contains outliers, as it uses the median and IQR rather than the mean and standard deviation, making it less sensitive to extreme values. For each index, the script subtracts the median from each data point and then divides the result by the IQR. The scaled data is stored in the scaled_data dictionary. This process standardizes the data, ensuring that all indices are on a comparable scale, which is crucial for subsequent analysis and visualization.
 
 
 
