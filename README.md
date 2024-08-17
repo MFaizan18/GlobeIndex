@@ -186,6 +186,7 @@ For example:
 `1D` corresponds to a 1-day frequency.
 
 This frequency code is used later in the script to create a time range that matches the selected interval, allowing the data to be properly aligned and processed according to the user's selection.
+
 Smoothing Factor (e.g., 50, 25):
 
 The second element in each tuple is a smoothing factor, which is used in calculations like the Exponential Moving Average (EMA).
