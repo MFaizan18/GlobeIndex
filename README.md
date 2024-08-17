@@ -254,7 +254,7 @@ The conversion process involves iterating over each date in the adjusted close p
 
 Finally, the converted data is stored in the USD_Convdata dictionary. For indices already in USD, the data is directly copied over without conversion. This comprehensive conversion process ensures that all index data is consistently expressed in USD, enabling reliable and meaningful global financial analysis.
 
-## Normalization
+## 8) Normalization
 
 Next, the script proceeds to normalize the data using robust statistical methods. It calculates the median and interquartile range (IQR) for each index and then applies robust scaling to ensure that the data is standardized, making it less sensitive to outliers
 
