@@ -126,8 +126,6 @@ These weights are determined based on the relative importance and market capital
 
 ## 7) Data Acquisition
 
-**7.1) Fetch Adjusted Close Data for Indices**
-
 This part of the code uses the `yfinance` library to fetch historical data for each index defined in the indices dictionary. The data is then stored in the `adj_close_data` dictionary for further processing.
 ```python
 adj_close_data = {}
