@@ -497,16 +497,25 @@ This graph captures the global index over a short-term period of 60 days with 30
 
 **14.2) Period = '365d', Interval = '1d':** 
 
-This screenshot presents the global index over a full year with daily intervals, offering insights into the broader market trends on a day-to-day basis.
+This graph presents the global index over a full year with daily intervals, offering insights into the broader market trends on a day-to-day basis.
 
 ![Daily global index performance across a full year](GlobeIndex(1d-365d).png)
 
 **14.3) Period = '1000d', Interval = '5d':** 
 
-This screenshot shows the global index over a long-term period of 1000 days with 5-day intervals, highlighting major trends and shifts in the global markets over an extended timeframe.
+This graph shows the global index over a long-term period of 1000 days with 5-day intervals, highlighting major trends and shifts in the global markets over an extended timeframe.
 
 ![Long-term global market trends over 1000 days with 5-day intervals](GlobeIndex(5d-1000d).png)
 
+Similarly, users can experiment with any combination of periods and intervals within the configurations provided in the code to gain insights into global market trends and see where the world is heading. This flexibility allows for tailored analysis, whether you're interested in short-term fluctuations or long-term shifts.
+
+## 15) Conclusion
+
+This project offers a powerful tool for analyzing global financial markets by aggregating and normalizing data from a wide array of indices across different timeframes. By converting all data to USD, applying robust statistical techniques, and benchmarking against a widely recognized index like the ACWI, the script provides a reliable and insightful global index that can be used to track market trends and make informed decisions.
+
+While the current implementation is robust, there are several ways to further enhance this project. One improvement could involve incorporating more indices from emerging markets to broaden the global coverage. Additionally, integrating more sophisticated smoothing techniques or machine learning models could help predict future market trends based on historical data. Finally, automating the selection of periods and intervals based on user preferences or market conditions could make the tool even more versatile and user-friendly.
+
+With these enhancements, this project could become an even more comprehensive and valuable resource for market analysts, investors, and researchers alike.
 
 
 
